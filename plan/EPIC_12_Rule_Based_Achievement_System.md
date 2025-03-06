@@ -110,7 +110,6 @@ Creating an event capture system requires handling data from various sources in 
 **AI Complexity: S**
 Implementing rule analytics involves standard data visualization and metrics collection. The complexity is moderate, focusing on presenting actionable insights about rule performance.
 
-
 ## Comments
 
 As an engineer implementing this epic, I recommend:

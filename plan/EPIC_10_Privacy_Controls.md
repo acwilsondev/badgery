@@ -1,6 +1,6 @@
 # Epic 10: Privacy Controls
 
-*Note: This Epic was promoted from STORY-5.2 in the original plan.*
+_Note: This Epic was promoted from STORY-5.2 in the original plan._
 
 Aligns with Milestone 2: Feature Expansion
 

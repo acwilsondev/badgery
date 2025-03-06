@@ -1,6 +1,6 @@
 # Epic 5: REST API Development
 
-*Note: This Epic was promoted from STORY-3.1 in the original plan.*
+_Note: This Epic was promoted from STORY-3.1 in the original plan._
 
 Aligns with Milestone 1: Foundation & CI/CD
 

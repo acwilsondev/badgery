@@ -47,12 +47,12 @@ This document presents a comprehensive gap analysis between the functional requi
 
 ## 3. User Role Analysis
 
-| Role | DESIGN.md | ARCHITECTURE.md | Gap |
-|------|-----------|-----------------|-----|
-| Site Administrator | Fully defined | Not explicitly addressed in components | Implementation details missing |
-| Organization Administrator | Fully defined | Flow diagram present for achievement creation | Mostly aligned |
-| End User | Fully defined | Flow diagram for achievement tracking | Well addressed |
-| Public Viewer | Defined as optional | Not explicitly mentioned | Implementation details missing |
+| Role                       | DESIGN.md           | ARCHITECTURE.md                               | Gap                            |
+| -------------------------- | ------------------- | --------------------------------------------- | ------------------------------ |
+| Site Administrator         | Fully defined       | Not explicitly addressed in components        | Implementation details missing |
+| Organization Administrator | Fully defined       | Flow diagram present for achievement creation | Mostly aligned                 |
+| End User                   | Fully defined       | Flow diagram for achievement tracking         | Well addressed                 |
+| Public Viewer              | Defined as optional | Not explicitly mentioned                      | Implementation details missing |
 
 ## 4. Data Flow Analysis
 
@@ -122,33 +122,39 @@ This document presents a comprehensive gap analysis between the functional requi
 ## 9. Recommendations
 
 1. **Enhance Notification Architecture**:
+
    - Design a dedicated notification service component
    - Clarify email integration and in-app alert mechanisms
    - %%REVISE: Clarify SMTP integration compatibilities. Defer all notification design for now.%%
 
 2. **Expand Analytics Implementation**:
+
    - Detail data collection points and storage approach
    - Specify visualization tools and dashboard components
    - %%REVISE: We should defer analytics design until a later milestone after we have a POC.%%
 
 3. **Address Public Viewer Role**:
+
    - Define public-facing components and access controls
    - Implement achievement verification mechanism details
    - %%ACCEPT%%
 
 4. **Strengthen Security Framework**:
+
    - Add data encryption at rest specifications
    - Create compliance verification processes
    - Document user data retention and deletion procedures
    - %%ACCEPT%%
 
 5. **Improve Scalability Planning**:
+
    - Define load testing benchmarks and targets
    - Document horizontal scaling strategies
    - Add caching layer specifications
    - %%REVISE: Accept, but should be a later milestone once we have POC.%%
 
 6. **Complete Social Integration Details**:
+
    - Specify OAuth integrations with social platforms
    - Detail embedding mechanisms for achievements
    - %%REVISE: Plan APIs with embedding in mind, but do not design dedicated embedding systems yet.%%

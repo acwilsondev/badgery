@@ -1,14 +1,14 @@
-# ARCHITECTURE.md  
+# ARCHITECTURE.md
 
 ## 1. Overview
 
-The Achievement Tracking Platform is a **Dockerized web application** built with **Remix** for frontend and backend logic. It supports **SQLite3** by default but allows JDBC-based connections to **PostgreSQL, MariaDB, or MySQL** for production. The system is designed to be **cloud-agnostic**, deployable on **AWS or any managed ecosystem** without reliance on proprietary services.  
+The Achievement Tracking Platform is a **Dockerized web application** built with **Remix** for frontend and backend logic. It supports **SQLite3** by default but allows JDBC-based connections to **PostgreSQL, MariaDB, or MySQL** for production. The system is designed to be **cloud-agnostic**, deployable on **AWS or any managed ecosystem** without reliance on proprietary services.
 
 ---
 
 ## 2. System Architecture
 
-### 2.1 High-Level Architecture Diagram  
+### 2.1 High-Level Architecture Diagram
 
 ```mermaid
 graph TD;
@@ -64,6 +64,7 @@ Public REST API for programmatic achievement assignment and retrieval Webhook sy
 ### 3.5 Administrative Interfaces
 
 - **Site Admin Dashboard**: Centralized interface for platform-wide management
+
   - User management across all organizations
   - System settings and configuration
   - Global analytics and reporting (future milestone)
@@ -129,20 +130,24 @@ graph TD;
 ## 6. Security Considerations
 
 - **Authentication**: OAuth 2.0 + JWT for secure API access
+
   - Multi-factor authentication for administrative accounts
   - Session timeout and automatic logout mechanisms
   - JWT rotation and expiry policies
 
 - **Authorization**: Role-based access control (RBAC) with principle of least privilege
+
   - Fine-grained permissions model for administrative functions
   - Organization isolation to prevent cross-organization data access
 
 - **API Security**:
+
   - Rate Limiting: Protect APIs from abuse
   - Input validation and sanitization
   - API versioning to support backward compatibility
 
 - **Data Protection**:
+
   - Webhook Security: Signed webhook payloads to prevent spoofing
   - Data Encryption: Enforce TLS for data in transit
   - Database encryption at rest for sensitive information

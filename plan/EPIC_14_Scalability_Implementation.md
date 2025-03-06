@@ -1,6 +1,6 @@
 # Epic 14: Scalability Implementation
 
-*Note: This Epic was promoted from STORY-8.2 in the original plan.*
+_Note: This Epic was promoted from STORY-8.2 in the original plan._
 
 ## Milestone Alignment
 
