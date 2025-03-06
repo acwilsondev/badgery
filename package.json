@@ -1,0 +1,34 @@
+{
+  "name": "badgery",
+  "version": "1.0.0",
+  "description": "Badgery monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "lint": "turbo lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/acwilsondev/badgery.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/acwilsondev/badgery/issues"
+  },
+  "homepage": "https://github.com/acwilsondev/badgery#readme",
+  "devDependencies": {
+    "turbo": "latest",
+    "prettier": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "npm@10.2.0"
+}
