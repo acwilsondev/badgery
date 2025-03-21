@@ -4,18 +4,11 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "remix vite:build",
-    "dev": "remix vite:dev",
-    "docker:build": "docker build -t badgery:production .",
-    "docker:build:dev": "docker build -t badgery:dev -f Dockerfile.dev .",
-    "docker:clean": "docker system prune -f && docker volume prune -f",
-    "docker:dev": "docker-compose up",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "lint": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint .",
-    "lint:fix": "eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint --fix .",
-    "start": "remix-serve ./build/server/index.js",
-    "typecheck": "tsc"
+    "dev": "docker-compose up",
+    "start": "docker build -t badgery:production . && docker-compose up",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\" && eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint --fix .",
+    "test": "vitest run",
+    "check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\" && eslint --ignore-path .gitignore --cache --cache-location ./node_modules/.cache/eslint . && vitest run"
   },
   "dependencies": {
     "@remix-run/node": "^2.16.0",
@@ -44,7 +37,8 @@
     "tailwindcss": "^3.4.4",
     "typescript": "^5.1.6",
     "vite": "^6.0.0",
-    "vite-tsconfig-paths": "^4.2.1"
+    "vite-tsconfig-paths": "^4.2.1",
+    "vitest": "^3.0.9"
   },
   "engines": {
     "node": ">=20.0.0"

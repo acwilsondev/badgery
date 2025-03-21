@@ -1,11 +1,10 @@
-import { json } from "@remix-run/node";
-import type { LoaderFunctionArgs } from "@remix-run/node";
+import { json } from '@remix-run/node';
 
 /**
  * Types for the health check response
  */
 interface HealthCheckData {
-  status: "ok";
+  status: 'ok';
   timestamp: string;
   environment: string;
   uptime: number;
@@ -16,25 +15,25 @@ interface HealthCheckData {
  * Server-side loader function for the health check endpoint
  * Returns basic application health information
  */
-export const loader = async ({ request }: LoaderFunctionArgs) => {
+export const loader = async () => {
   // Get application information
-  const environment = process.env.NODE_ENV || "development";
+  const environment = process.env.NODE_ENV || 'development';
   const uptime = process.uptime(); // Server uptime in seconds
-  
+
   // Create health check response
   const healthData: HealthCheckData = {
-    status: "ok",
+    status: 'ok',
     timestamp: new Date().toISOString(),
     environment,
     uptime,
-    version: process.env.npm_package_version || "unknown",
+    version: process.env.npm_package_version || 'unknown',
   };
 
   // Return JSON response with 200 status
   return json(healthData, {
     status: 200,
     headers: {
-      "Cache-Control": "no-store, max-age=0",
+      'Cache-Control': 'no-store, max-age=0',
     },
   });
 };
@@ -47,4 +46,3 @@ export default function HealthCheck() {
   // since the JSON is returned before rendering, but is needed for Remix
   return null;
 }
-
