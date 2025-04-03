@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   app:
     build:
@@ -16,11 +18,11 @@ services:
       - VITE_APP_ENV=development
       - CHOKIDAR_USEPOLLING=true # Helpful for certain systems to detect file changes
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5173/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 15s
+      start_period: 40s
     restart: unless-stopped
     networks:
       - badgery-network

@@ -1,50 +1,34 @@
 # Build stage
 FROM node:20-slim AS builder
-
-# Set working directory
 WORKDIR /app
 
-# Copy package files for dependency installation
-COPY package.json package-lock.json ./
+# Install dependencies
+COPY package*.json ./
+RUN npm ci
 
-# Install dependencies with clean npm cache
-RUN npm ci && npm cache clean --force
-
-# Copy application code
+# Copy source and build
 COPY . .
-
-# Build the application
 RUN npm run build
 
 # Production stage
-FROM node:20-slim AS production
-
-# Set working directory
+FROM node:20-slim AS runner
 WORKDIR /app
 
-# Create a non-root user to run the application
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nodejs
-
-# Set environment to production
 ENV NODE_ENV=production
 
-# Copy package files
-COPY package.json package-lock.json ./
+# Create a non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 remixuser && \
+    chown -R remixuser:nodejs /app
 
-# Install only production dependencies
-RUN npm ci --only=production && npm cache clean --force
+# Add curl for healthcheck
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy built application from builder stage
-COPY --from=builder --chown=nodejs:nodejs /app/build ./build
-COPY --from=builder --chown=nodejs:nodejs /app/public ./public
+# Copy only necessary files from builder
+COPY --from=builder --chown=remixuser:nodejs /app/build ./build
+COPY --from=builder --chown=remixuser:nodejs /app/public ./public
+COPY --from=builder --chown=remixuser:nodejs /app/package*.json ./
 
-# Switch to non-root user
-USER nodejs
-
-# Expose the application port
-EXPOSE 3000
-
-# Set the command to run the application
-CMD ["npm", "run", "start"]
-
+# Install production dependencies o

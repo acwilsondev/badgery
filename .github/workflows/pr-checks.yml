@@ -7,10 +7,38 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    name: Run Tests
+  security:
+    name: Security Scan
     runs-on: ubuntu-latest
-    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: javascript
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+
+      - name: Scan Docker Image
+        uses: snyk/actions/docker@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          image: node:20-alpine
+          args: --file=Dockerfile
+
+  code-quality:
+    name: Code Quality
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       
@@ -26,6 +54,27 @@ jobs:
       - name: Run linting
         run: npm run lint
         
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Type check
+        run: npm run typecheck
+
+  tests:
+    name: Tests & Coverage
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+        
       - name: Run tests with coverage
         run: npm run test:coverage
         env:
@@ -33,12 +82,39 @@ jobs:
           VITEST_MIN_NEW_COVERAGE: 90
 
       - name: Upload coverage reports
-        uses: actions/upload-artifact@v4
+        uses: codecov/codecov-action@v4
         with:
-          name: coverage-report
-          path: coverage/
-          retention-days: 30
-        
-      - name: Type check
-        run: npm run typecheck
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage/lcov.info
+          fail_ci_if_error: true
 
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check Documentation Updates
+        run: |
+          # Get list of changed files
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }})
+          
+          # Check if code files were modified without README updates
+          if echo "$CHANGED_FILES" | grep -q "src/" && ! echo "$CHANGED_FILES" | grep -q "README.md"; then
+            echo "⚠️ Code changes detected without README updates. Please verify if documentation updates are needed."
+            # Don't fail the build, just warn
+          fi
+          
+          # Check if API changes were made without docs updates
+          if echo "$CHANGED_FILES" | grep -q "src/api/" && ! echo "$CHANGED_FILES" | grep -q "docs/api/"; then
+            echo "❌ API changes detected without documentation updates"
+            exit 1
+          fi
+          
+          # Verify changelog entry for feature branches
+          if [[ "${{ github.head_ref }}" == "feature/"* ]] && ! echo "$CHANGED_FILES" | grep -q "CHANGELOG.md"; then
+            echo "❌ Feature branch detected without CHANGELOG.md updates"
+            exit 1
+          fi
