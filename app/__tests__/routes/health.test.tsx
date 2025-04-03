@@ -1,5 +1,8 @@
-import { beforeEach, afterEach, describe, expect, it, vi } from 'vitest';
-import { loader } from './health';
+import { loader } from '../../routes/health';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+// Create a mock Response constructor that matches the web standard
+global.Response = Response;
 
 // Mock JSON function to return a proper Response object
 vi.mock('@remix-run/node', () => ({
@@ -94,3 +97,4 @@ describe('Health Route', () => {
     );
   });
 });
+
