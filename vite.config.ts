@@ -22,4 +22,27 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  test: {
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json', 'html'],
+      exclude: [
+        'node_modules/',
+        'build/',
+        'public/',
+        '**/*.d.ts',
+        '**/*.config.*',
+        '**/postcss.config.js',
+        '**/tailwind.config.js',
+        'coverage/**'
+      ],
+      thresholds: {
+        statements: 80,
+        branches: 80,
+        functions: 80,
+        lines: 80,
+        perFile: true
+      }
+    }
+  },
 });

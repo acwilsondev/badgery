@@ -20,11 +20,13 @@ export default function Index() {
               src="/logo-light.png"
               alt="Remix"
               className="block w-full dark:hidden"
+              data-testid="logo-light"
             />
             <img
               src="/logo-dark.png"
               alt="Remix"
               className="hidden w-full dark:block"
+              data-testid="logo-dark"
             />
           </div>
         </header>

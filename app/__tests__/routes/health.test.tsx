@@ -1,4 +1,5 @@
-import { loader } from '../../routes/health';
+import { render } from '@testing-library/react';
+import { loader, default as HealthCheck } from '../../routes/health';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Create a mock Response constructor that matches the web standard
@@ -96,5 +97,33 @@ describe('Health Route', () => {
       })
     );
   });
-});
 
+  it('should handle environment variables being set differently', async () => {
+    // Set different environment values
+    process.env.NODE_ENV = 'production';
+    process.env.npm_package_version = '2.0.0';
+
+    const response = await loader();
+    const data = await response.json();
+
+    expect(data.environment).toBe('production');
+    expect(data.version).toBe('2.0.0');
+  });
+
+  it('should handle missing environment variables', async () => {
+    // Explicitly delete environment variables
+    delete process.env.NODE_ENV;
+    delete process.env.npm_package_version;
+
+    const response = await loader();
+    const data = await response.json();
+
+    expect(data.environment).toBe('development');
+    expect(data.version).toBe('unknown');
+  });
+
+  it('should render null for the component', () => {
+    const { container } = render(<HealthCheck />);
+    expect(container.firstChild).toBeNull();
+  });
+});
