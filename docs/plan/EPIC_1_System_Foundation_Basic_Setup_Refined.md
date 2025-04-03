@@ -15,7 +15,8 @@ Aligns with Milestone 1: Foundation & CI/CD
 **So that** code quality and security can be verified automatically before merging
 
 **Tasks:**
-- [ ] GitHub Actions PR Workflow
+
+- [x] GitHub Actions PR Workflow
   - Set up TypeScript type checking
   - Configure Vitest unit tests
   - Implement ESLint code style checks
@@ -41,6 +42,7 @@ Aligns with Milestone 1: Foundation & CI/CD
   - Ensure changelog updates
 
 **Acceptance Criteria:**
+
 - All PRs automatically run:
   - Unit tests with coverage report
   - TypeScript type checking
@@ -54,6 +56,7 @@ Aligns with Milestone 1: Foundation & CI/CD
 - Documentation is verified for completeness
 
 **Technical Constraints:**
+
 - Use GitHub Actions for CI
 - Use Vitest for testing
 - Use ESLint and Prettier for code style
@@ -61,6 +64,7 @@ Aligns with Milestone 1: Foundation & CI/CD
 - Use TypeScript in strict mode
 
 **Estimated Timeline:**
+
 - Basic CI Setup: 1 day
 - Security Scanning: 1 day
 - Quality Gates: 0.5 day
@@ -128,6 +132,7 @@ Total: 3 days
 **So that** the application can be reliably deployed to production with minimal operational overhead
 
 **Tasks:**
+
 - [ ] Initial AWS CDK Setup
   - Initialize CDK project with TypeScript
   - Create VPC with public and private subnets
@@ -174,6 +179,7 @@ Total: 3 days
   - Implement auto-scaling policies for cost optimization
 
 **Acceptance Criteria:**
+
 - Infrastructure is fully defined in CDK with TypeScript
 - Application automatically deploys through GitHub Actions
 - Zero-downtime deployments with blue/green strategy
@@ -188,6 +194,7 @@ Total: 3 days
 - Integration tests run in pipeline before deployment
 
 **Non-functional Requirements:**
+
 - Deployment completes within 10 minutes
 - 99.9% uptime target
 - All infrastructure changes are tracked in version control
@@ -197,6 +204,7 @@ Total: 3 days
 - Automatic scaling at 70% CPU/memory utilization
 
 **Technical Constraints:**
+
 - Use AWS CDK v2 with TypeScript
 - Use ECS Fargate for container orchestration
 - Use ECR for container registry
@@ -207,6 +215,7 @@ Total: 3 days
 - Use Route 53 for DNS management
 
 **Estimated Timeline:**
+
 - Infrastructure Setup: 2 days
 - CI/CD Pipeline: 1 day
 - Monitoring and Alerting: 1 day
@@ -223,6 +232,7 @@ Total: 6 days
 **So that** we can enable branch protection and share the project with the community
 
 **Tasks:**
+
 - [ ] Pre-publicity Security Review
   - Verify no sensitive tokens or credentials in git history
   - Ensure all project secrets are managed through GitHub Secrets
@@ -250,6 +260,7 @@ Total: 6 days
   - Add security policy documentation
 
 **Acceptance Criteria:**
+
 - Repository is public with no exposed secrets
 - All required GitHub Secrets are configured:
   - SNYK_TOKEN
@@ -264,18 +275,19 @@ Total: 6 days
 - PR and issue templates are configured
 
 **Technical Constraints:**
+
 - Follow GitHub security best practices
 - Maintain documentation in Markdown format
 - Use GitHub's built-in template features
 
 **Estimated Timeline:**
+
 - Security Review: 0.5 day
 - Documentation Updates: 1 day
 - GitHub Configuration: 0.5 day
 Total: 2 days
 
 **AI Complexity: L** Making a repository public requires careful verification of security concerns and thorough documentation, but follows standard processes.
-
 
 ## Comments
 
