@@ -13,6 +13,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+        # Continue on error to prevent CI failure for fixable issues
+        continue-on-error: true
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v2
         with:
@@ -33,7 +47,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: node:20-alpine
+          image: badgery:latest
           args: --file=Dockerfile
 
   code-quality:
@@ -110,6 +124,12 @@ jobs:
           # Check if API changes were made without docs updates
           if echo "$CHANGED_FILES" | grep -q "src/api/" && ! echo "$CHANGED_FILES" | grep -q "docs/api/"; then
             echo "❌ API changes detected without documentation updates"
+            exit 1
+          fi
+          
+          # Check if TypeScript source files changed without declaration updates
+          if echo "$CHANGED_FILES" | grep -q "\.tsx\?$" && ! echo "$CHANGED_FILES" | grep -q "\.d\.ts$"; then
+            echo "❌ TypeScript source files changed without corresponding declaration (.d.ts) updates"
             exit 1
           fi
           
