@@ -47,8 +47,8 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
-          image: badgery:latest
-          args: --file=Dockerfile
+          image: ghcr.io/${{ github.repository }}:${{ github.sha }}
+          args: --file=Dockerfile --severity-threshold=high
 
   code-quality:
     name: Code Quality

@@ -15,13 +15,13 @@ describe('SecretManager', () => {
   describe('Instance Management', () => {
     test('should not allow direct instantiation with new operator', () => {
       expect(() => {
-        // @ts-ignore - Accessing private constructor for testing
+        // @ts-expect-error - Accessing private constructor for testing
         new SecretManager();
       }).not.toThrow();
       
       // Second call should throw, since an instance now exists
       expect(() => {
-        // @ts-ignore - Accessing private constructor for testing
+        // @ts-expect-error - Accessing private constructor for testing
         new SecretManager();
       }).toThrow('Use SecretManager.getInstance() instead of new operator');
     });

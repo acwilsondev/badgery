@@ -1,7 +1,10 @@
+import { SecretManager } from '../types';
+
 /**
- * Manages access to application secrets with validation and type safety.
+ * Environment-based secrets manager
+ * Manages access to application secrets through environment variables
  */
-export class SecretManager {
+export class EnvSecretManager implements SecretManager {
   /**
    * Retrieves a required secret value.
    * @param secretName - The name of the secret to retrieve
@@ -9,7 +12,7 @@ export class SecretManager {
    * @throws Error if the secret is not found or fails validation
    * @returns The secret value
    */
-  public getSecret(secretName: string, formatValidator?: RegExp): string {
+  public async getSecret(secretName: string, formatValidator?: RegExp): Promise<string> {
     const value = process.env[secretName]?.trim();
 
     if (!value) {
@@ -30,11 +33,11 @@ export class SecretManager {
    * @param formatValidator - Optional regex pattern to validate the secret format
    * @returns The secret value or the default value
    */
-  public getOptionalSecret(
+  public async getOptionalSecret(
     secretName: string,
     defaultValue: string,
     formatValidator?: RegExp
-  ): string {
+  ): Promise<string> {
     const value = process.env[secretName]?.trim();
 
     if (!value) {
@@ -49,17 +52,27 @@ export class SecretManager {
   }
 
   /**
-   * Creates a singleton instance of SecretManager
-   * @returns A SecretManager instance
+   * Checks if a secret exists
+   * @param secretName - The name of the secret to check
+   * @returns Promise resolving to true if the secret exists
    */
-  public static getInstance(): SecretManager {
-    if (!SecretManager.instance) {
-      SecretManager.instance = new SecretManager();
-    }
-    return SecretManager.instance;
+  public async hasSecret(secretName: string): Promise<boolean> {
+    const value = process.env[secretName]?.trim();
+    return value !== undefined && value !== '';
   }
 
-  private static instance: SecretManager | null = null;
+  /**
+   * Creates a singleton instance of EnvSecretManager
+   * @returns The EnvSecretManager instance
+   */
+  public static getInstance(): EnvSecretManager {
+    if (!EnvSecretManager.instance) {
+      EnvSecretManager.instance = new EnvSecretManager();
+    }
+    return EnvSecretManager.instance;
+  }
+
+  private static instance: EnvSecretManager | null = null;
 
   /**
    * Private constructor to enforce singleton pattern
@@ -67,16 +80,16 @@ export class SecretManager {
    */
   private constructor() {
     // Before checking, store the current instance value
-    const currentInstance = SecretManager.instance;
+    const currentInstance = EnvSecretManager.instance;
     
     // Temporarily set this as the instance
-    SecretManager.instance = this;
+    EnvSecretManager.instance = this;
     
     // Now check if there was a previous instance
     if (currentInstance) {
       // Restore the previous instance and throw
-      SecretManager.instance = currentInstance;
-      throw new Error("Use SecretManager.getInstance() instead of new operator");
+      EnvSecretManager.instance = currentInstance;
+      throw new Error("Use EnvSecretManager.getInstance() instead of new operator");
     }
   }
 
@@ -85,6 +98,6 @@ export class SecretManager {
    * @internal
    */
   public static resetInstance(): void {
-    SecretManager.instance = null;
+    EnvSecretManager.instance = null;
   }
 }
