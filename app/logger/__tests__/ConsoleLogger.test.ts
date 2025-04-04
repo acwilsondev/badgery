@@ -1,8 +1,8 @@
 import { describe, test, expect, beforeEach, vi } from 'vitest';
-import { ConfigFactory } from '../../config/ConfigFactory';
-import { LoggerFactory } from '../LoggerFactory';
+import { EnvConfigManager } from '../../config/EnvConfigManager';
+import { ConsoleLogger } from '../ConsoleLogger';
 
-describe('LoggerFactory', () => {
+describe('ConsoleLogger', () => {
   const mockConfig = {
     nodeEnv: 'development' as const,
     port: 3000,
@@ -13,8 +13,9 @@ describe('LoggerFactory', () => {
     vi.resetModules();
     vi.clearAllMocks();
     // Reset the singleton instance between tests
-    // @ts-expect-error accessing private for testing
-    LoggerFactory.instance = undefined;
+    ConsoleLogger.resetInstance();
+    // Reset config manager too as it's a dependency
+    EnvConfigManager.resetInstance();
     // Mock console methods
     vi.spyOn(console, 'debug').mockImplementation(() => {});
     vi.spyOn(console, 'info').mockImplementation(() => {});
@@ -24,32 +25,43 @@ describe('LoggerFactory', () => {
 
   describe('singleton pattern', () => {
     test('should return the same instance', () => {
-      vi.spyOn(ConfigFactory, 'createConfig').mockReturnValue(mockConfig);
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
+        getConfig: () => mockConfig
+      } as any);
       
-      const instance1 = LoggerFactory.getInstance();
-      const instance2 = LoggerFactory.getInstance();
+      const instance1 = ConsoleLogger.getInstance();
+      const instance2 = ConsoleLogger.getInstance();
       
       expect(instance1).toBe(instance2);
-      expect(ConfigFactory.createConfig).toHaveBeenCalledTimes(1);
+      expect(EnvConfigManager.getInstance).toHaveBeenCalledTimes(1);
     });
 
-    test('should use config from ConfigFactory', () => {
+    test('should use config from EnvConfigManager', () => {
       const customConfig = { ...mockConfig, logLevel: 'info' as const };
-      vi.spyOn(ConfigFactory, 'createConfig').mockReturnValue(customConfig);
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
+        getConfig: () => customConfig
+      } as any);
       
-      const logger = LoggerFactory.getInstance();
+      const logger = ConsoleLogger.getInstance();
       
-      // @ts-expect-error accessing private for testing
-      expect(logger.logLevel).toBe('info');
+      // Log a message to test the configured level
+      logger.debug('Debug message');
+      logger.info('Info message');
+      
+      // Debug shouldn't be called with 'info' level
+      expect(console.debug).not.toHaveBeenCalled();
+      expect(console.info).toHaveBeenCalled();
     });
   });
 
   describe('log level hierarchy', () => {
     test('should respect configured level', () => {
       const customConfig = { ...mockConfig, logLevel: 'warn' as const };
-      vi.spyOn(ConfigFactory, 'createConfig').mockReturnValue(customConfig);
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
+        getConfig: () => customConfig
+      } as any);
       
-      const logger = LoggerFactory.getInstance();
+      const logger = ConsoleLogger.getInstance();
       
       logger.debug('Debug message');
       logger.info('Info message');
@@ -65,9 +77,12 @@ describe('LoggerFactory', () => {
 
   describe('log formatting', () => {
     test('should include required fields', () => {
-      const prodConfig = { ...mockConfig, nodeEnv: 'production' };
-      vi.spyOn(ConfigFactory, 'createConfig').mockReturnValue(prodConfig);
-      const logger = LoggerFactory.getInstance();
+      const prodConfig = { ...mockConfig, nodeEnv: 'production' as const };
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
+        getConfig: () => prodConfig
+      } as any);
+      
+      const logger = ConsoleLogger.getInstance();
       
       logger.info('Test message');
       
@@ -84,9 +99,12 @@ describe('LoggerFactory', () => {
     });
 
     test('should include error details', () => {
-      const prodConfig = { ...mockConfig, nodeEnv: 'production' };
-      vi.spyOn(ConfigFactory, 'createConfig').mockReturnValue(prodConfig);
-      const logger = LoggerFactory.getInstance();
+      const prodConfig = { ...mockConfig, nodeEnv: 'production' as const };
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
+        getConfig: () => prodConfig
+      } as any);
+      
+      const logger = ConsoleLogger.getInstance();
       const error = new Error('Test error');
       
       logger.error('Error occurred', error);
@@ -106,10 +124,12 @@ describe('LoggerFactory', () => {
 
   describe('environment-specific formatting', () => {
     test('development should use pretty print', () => {
-      const devConfig = { ...mockConfig, nodeEnv: 'development' };
-      vi.spyOn(ConfigFactory, 'createConfig').mockReturnValue(devConfig);
+      const devConfig = { ...mockConfig, nodeEnv: 'development' as const };
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
+        getConfig: () => devConfig
+      } as any);
       
-      const logger = LoggerFactory.getInstance();
+      const logger = ConsoleLogger.getInstance();
       logger.info('Test message');
       
       const call = (console.info as jest.Mock).mock.calls[0][0];
@@ -121,10 +141,12 @@ describe('LoggerFactory', () => {
     });
 
     test('production should use JSON', () => {
-      const prodConfig = { ...mockConfig, nodeEnv: 'production' };
-      vi.spyOn(ConfigFactory, 'createConfig').mockReturnValue(prodConfig);
+      const prodConfig = { ...mockConfig, nodeEnv: 'production' as const };
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
+        getConfig: () => prodConfig
+      } as any);
       
-      const logger = LoggerFactory.getInstance();
+      const logger = ConsoleLogger.getInstance();
       logger.info('Test message');
       
       const call = (console.info as jest.Mock).mock.calls[0][0];
@@ -140,10 +162,12 @@ describe('LoggerFactory', () => {
     });
 
     test('staging should use JSON', () => {
-      const stagingConfig = { ...mockConfig, nodeEnv: 'staging' };
-      vi.spyOn(ConfigFactory, 'createConfig').mockReturnValue(stagingConfig);
+      const stagingConfig = { ...mockConfig, nodeEnv: 'staging' as const };
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
+        getConfig: () => stagingConfig
+      } as any);
       
-      const logger = LoggerFactory.getInstance();
+      const logger = ConsoleLogger.getInstance();
       logger.info('Test message');
       
       const call = (console.info as jest.Mock).mock.calls[0][0];
@@ -159,3 +183,4 @@ describe('LoggerFactory', () => {
     });
   });
 });
+
