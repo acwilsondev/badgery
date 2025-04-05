@@ -9,16 +9,18 @@ services:
     volumes:
       - .:/app # Mount source code
       - node_modules:/app/node_modules # Use named volume for node_modules
+      - .env.development:/app/.env.development:ro # Mount development env file as read-only
     ports:
-      - "5173:5173" # Map port 5173 to host
+      - "3000:3000" # Main application port
+      - "5173:5173" # Vite dev server port
     environment:
       - NODE_ENV=development
+      - PORT=3000
+      - LOG_LEVEL=debug
       - REMIX_DEV_SERVER_PORT=5173
-      - DEBUG=badgery:*
-      - VITE_APP_ENV=development
       - CHOKIDAR_USEPOLLING=true # Helpful for certain systems to detect file changes
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      test: ["CMD", "curl", "-f", "http://localhost:${PORT:-3000}/health"]
       interval: 30s
       timeout: 10s
       retries: 3

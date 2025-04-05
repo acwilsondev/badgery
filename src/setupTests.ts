@@ -7,4 +7,3 @@ import '@testing-library/jest-dom/vitest';
 
 // Note: whatwg-fetch is imported in vitest.config.ts via setupFiles
 // so we don't need to import it here
-

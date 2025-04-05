@@ -8,8 +8,8 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['**/*.{test,spec}.{ts,tsx,js,jsx}'],
     setupFiles: [
-      './src/setupTests.ts',  // For @testing-library/jest-dom setup
-      'whatwg-fetch/fetch.js' // Polyfill for fetch API
+      './src/setupTests.ts', // For @testing-library/jest-dom setup
+      'whatwg-fetch/fetch.js', // Polyfill for fetch API
     ],
     coverage: {
       provider: 'v8',
@@ -27,19 +27,16 @@ export default defineConfig({
         // Remix framework files
         '**/entry.client.tsx',
         '**/entry.server.tsx',
-        '**/root.tsx'
+        '**/root.tsx',
       ],
-      include: [
-        'app/**/*.{ts,tsx}'
-      ],
+      include: ['app/**/*.{ts,tsx}'],
       thresholds: {
         statements: 80,
         branches: 80,
         functions: 80,
         lines: 80,
-        perFile: true
-      }
-    }
-  }
+        perFile: true,
+      },
+    },
+  },
 });
-
