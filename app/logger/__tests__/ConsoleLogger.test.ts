@@ -2,6 +2,30 @@ import { describe, test, expect, beforeEach, vi } from 'vitest';
 import { EnvConfigManager } from '../../config/EnvConfigManager';
 import { ConsoleLogger } from '../ConsoleLogger';
 
+// Define necessary types
+type NodeEnv = 'development' | 'production' | 'staging';
+type LogLevel = 'debug' | 'info' | 'warn' | 'error';
+
+interface Config {
+  nodeEnv: NodeEnv;
+  port: number;
+  logLevel: LogLevel;
+}
+
+interface ConfigManager {
+  getConfig(): Config;
+  reload?(): Promise<void>;
+  validate?(): Promise<boolean>;
+}
+
+// Mock implementation of ConfigManager
+class MockConfigManager implements ConfigManager {
+  constructor(private config: Config) {}
+  
+  getConfig(): Config {
+    return this.config;
+  }
+}
 describe('ConsoleLogger', () => {
   const mockConfig = {
     nodeEnv: 'development' as const,
@@ -25,9 +49,9 @@ describe('ConsoleLogger', () => {
 
   describe('singleton pattern', () => {
     test('should return the same instance', () => {
-      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
-        getConfig: () => mockConfig
-      } as any);
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
+        new MockConfigManager(mockConfig)
+      );
       
       const instance1 = ConsoleLogger.getInstance();
       const instance2 = ConsoleLogger.getInstance();
@@ -38,9 +62,9 @@ describe('ConsoleLogger', () => {
 
     test('should use config from EnvConfigManager', () => {
       const customConfig = { ...mockConfig, logLevel: 'info' as const };
-      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
-        getConfig: () => customConfig
-      } as any);
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
+        new MockConfigManager(customConfig)
+      );
       
       const logger = ConsoleLogger.getInstance();
       
@@ -57,9 +81,9 @@ describe('ConsoleLogger', () => {
   describe('log level hierarchy', () => {
     test('should respect configured level', () => {
       const customConfig = { ...mockConfig, logLevel: 'warn' as const };
-      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
-        getConfig: () => customConfig
-      } as any);
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
+        new MockConfigManager(customConfig)
+      );
       
       const logger = ConsoleLogger.getInstance();
       
@@ -78,9 +102,9 @@ describe('ConsoleLogger', () => {
   describe('log formatting', () => {
     test('should include required fields', () => {
       const prodConfig = { ...mockConfig, nodeEnv: 'production' as const };
-      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
-        getConfig: () => prodConfig
-      } as any);
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
+        new MockConfigManager(prodConfig)
+      );
       
       const logger = ConsoleLogger.getInstance();
       
@@ -100,9 +124,9 @@ describe('ConsoleLogger', () => {
 
     test('should include error details', () => {
       const prodConfig = { ...mockConfig, nodeEnv: 'production' as const };
-      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
-        getConfig: () => prodConfig
-      } as any);
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
+        new MockConfigManager(prodConfig)
+      );
       
       const logger = ConsoleLogger.getInstance();
       const error = new Error('Test error');
@@ -125,9 +149,9 @@ describe('ConsoleLogger', () => {
   describe('environment-specific formatting', () => {
     test('development should use pretty print', () => {
       const devConfig = { ...mockConfig, nodeEnv: 'development' as const };
-      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
-        getConfig: () => devConfig
-      } as any);
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
+        new MockConfigManager(devConfig)
+      );
       
       const logger = ConsoleLogger.getInstance();
       logger.info('Test message');
@@ -142,9 +166,9 @@ describe('ConsoleLogger', () => {
 
     test('production should use JSON', () => {
       const prodConfig = { ...mockConfig, nodeEnv: 'production' as const };
-      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
-        getConfig: () => prodConfig
-      } as any);
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
+        new MockConfigManager(prodConfig)
+      );
       
       const logger = ConsoleLogger.getInstance();
       logger.info('Test message');
@@ -163,9 +187,9 @@ describe('ConsoleLogger', () => {
 
     test('staging should use JSON', () => {
       const stagingConfig = { ...mockConfig, nodeEnv: 'staging' as const };
-      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue({
-        getConfig: () => stagingConfig
-      } as any);
+      vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
+        new MockConfigManager(stagingConfig)
+      );
       
       const logger = ConsoleLogger.getInstance();
       logger.info('Test message');
