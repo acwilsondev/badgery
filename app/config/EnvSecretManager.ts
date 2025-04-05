@@ -12,7 +12,10 @@ export class EnvSecretManager implements SecretManager {
    * @throws Error if the secret is not found or fails validation
    * @returns The secret value
    */
-  public async getSecret(secretName: string, formatValidator?: RegExp): Promise<string> {
+  public async getSecret(
+    secretName: string,
+    formatValidator?: RegExp
+  ): Promise<string> {
     const value = process.env[secretName]?.trim();
 
     if (!value) {
@@ -81,15 +84,17 @@ export class EnvSecretManager implements SecretManager {
   private constructor() {
     // Before checking, store the current instance value
     const currentInstance = EnvSecretManager.instance;
-    
+
     // Temporarily set this as the instance
     EnvSecretManager.instance = this;
-    
+
     // Now check if there was a previous instance
     if (currentInstance) {
       // Restore the previous instance and throw
       EnvSecretManager.instance = currentInstance;
-      throw new Error("Use EnvSecretManager.getInstance() instead of new operator");
+      throw new Error(
+        'Use EnvSecretManager.getInstance() instead of new operator'
+      );
     }
   }
 

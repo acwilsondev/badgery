@@ -5,9 +5,11 @@ This document outlines three possible deployment architectures for Badgery, each
 ## Option 1: Self-Hosted on EC2
 
 ### Overview
+
 This approach maximizes control and potential cost savings by running services on EC2 instances.
 
 ### Components
+
 - EC2 instances in an Auto Scaling Group
 - Self-managed Nginx load balancer
 - Self-managed Docker runtime
@@ -16,6 +18,7 @@ This approach maximizes control and potential cost savings by running services o
 - Route 53 for DNS
 
 ### Architecture Diagram
+
 ```
 [EC2 ASG] → [Nginx LB] → [Internet]
                 ↑
@@ -23,18 +26,21 @@ This approach maximizes control and potential cost savings by running services o
 ```
 
 ### Pros
+
 - Maximum control over infrastructure
 - Potential cost savings at scale
 - No vendor lock-in for container orchestration
 - Full control over security policies
 
 ### Cons
+
 - Higher maintenance overhead
 - Need to manage security patches
 - More complex deployment process
 - Manual scaling configuration
 
 ### Estimated Costs
+
 - EC2 instances (~$30-50/month per instance)
 - Load Balancer (~$20/month)
 - Route 53 (~$0.50/hosted zone/month)
@@ -43,9 +49,11 @@ This approach maximizes control and potential cost savings by running services o
 ## Option 2: AWS Managed Services
 
 ### Overview
+
 This approach leverages AWS managed services to minimize operational overhead.
 
 ### Components
+
 - ECS Fargate for container orchestration
 - Application Load Balancer
 - ECR for container registry
@@ -54,6 +62,7 @@ This approach leverages AWS managed services to minimize operational overhead.
 - Route 53 for DNS
 
 ### Architecture Diagram
+
 ```
 [ECR] → [ECS Fargate] → [ALB] → [Internet]
             ↑
@@ -61,6 +70,7 @@ This approach leverages AWS managed services to minimize operational overhead.
 ```
 
 ### Pros
+
 - Minimal operational overhead
 - Built-in auto-scaling
 - Managed security patches
@@ -68,12 +78,14 @@ This approach leverages AWS managed services to minimize operational overhead.
 - Built-in high availability
 
 ### Cons
+
 - Higher cost at scale
 - Less control over infrastructure
 - AWS vendor lock-in
 - Cost can be less predictable
 
 ### Estimated Costs
+
 - ECS Fargate (~$40-60/month)
 - ALB (~$20/month)
 - ECR (~$5/month)
@@ -83,9 +95,11 @@ This approach leverages AWS managed services to minimize operational overhead.
 ## Option 3: Hybrid Approach
 
 ### Overview
+
 This approach balances control and convenience by using EC2 for core services and managed services for auxiliary components.
 
 ### Components
+
 - EC2 instances for application containers
 - ECS EC2 launch type
 - Application Load Balancer (managed)
@@ -95,6 +109,7 @@ This approach balances control and convenience by using EC2 for core services an
 - Route 53 for DNS
 
 ### Architecture Diagram
+
 ```
 [ECR] → [ECS on EC2] → [ALB] → [Internet]
             ↑
@@ -102,18 +117,21 @@ This approach balances control and convenience by using EC2 for core services an
 ```
 
 ### Pros
+
 - More control over compute resources
 - Better cost optimization possibilities
 - Managed container orchestration
 - Flexible scaling options
 
 ### Cons
+
 - Moderate operational overhead
 - Need to manage EC2 instances
 - Mixed complexity in deployment
 - Requires more AWS expertise
 
 ### Estimated Costs
+
 - EC2 instances (~$30-50/month per instance)
 - ALB (~$20/month)
 - ECR (~$5/month)
@@ -123,9 +141,11 @@ This approach balances control and convenience by using EC2 for core services an
 ## Option 4: Indie Self-Host Stack
 
 ### Overview
+
 This approach prioritizes simplicity and familiarity for developers comfortable with docker-compose, targeting single-VPS deployments common in indie hacking and small-scale applications.
 
 ### Components
+
 - Single VPS (e.g., $5-10/month DigitalOcean droplet)
 - Docker with docker-compose
 - Traefik for SSL and reverse proxy
@@ -135,6 +155,7 @@ This approach prioritizes simplicity and familiarity for developers comfortable 
 - Prometheus + Grafana for monitoring (optional)
 
 ### Architecture Diagram
+
 ```
 [GitHub Actions] → [Docker Hub] → [Watchtower]
                                   ↓
@@ -144,6 +165,7 @@ This approach prioritizes simplicity and familiarity for developers comfortable 
 ```
 
 ### Directory Structure
+
 ```
 /opt/badgery/
 ├── docker-compose.yml
@@ -155,12 +177,14 @@ This approach prioritizes simplicity and familiarity for developers comfortable 
 ```
 
 ### Deployment Flow
+
 1. Push to main branch
 2. GitHub Actions builds and pushes to Docker Hub
 3. Watchtower detects new image and performs rolling update
 4. Traefik automatically handles SSL and routing
 
 ### Pros
+
 - Simplest deployment model
 - Lowest cost for small scale
 - Familiar tooling (docker-compose)
@@ -170,6 +194,7 @@ This approach prioritizes simplicity and familiarity for developers comfortable 
 - Simple backup strategy
 
 ### Cons
+
 - Manual scaling
 - Single point of failure
 - More hands-on maintenance
@@ -177,18 +202,21 @@ This approach prioritizes simplicity and familiarity for developers comfortable 
 - No automatic failover
 
 ### Estimated Costs
+
 - VPS (~$5-10/month)
 - Domain + SSL (free with Let's Encrypt)
 - Backups (~$5/month)
 - Total: Starting at ~$10-15/month
 
 ### Scaling Strategy
+
 1. Start with single VPS
 2. Scale vertically (increase VPS size) as needed
 3. Add read replicas if needed
 4. Consider migration to Option 1 or 2 at scale
 
 ### Disaster Recovery
+
 1. Regular backups to S3-compatible storage
 2. Documented restore procedure
 3. Configuration managed in git
@@ -229,4 +257,3 @@ If we need to migrate to a different option in the future:
 3. Configure monitoring and alerting
 4. Document operational procedures
 5. Create cost monitoring dashboard
-

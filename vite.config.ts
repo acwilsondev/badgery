@@ -18,7 +18,7 @@ export default defineConfig({
         v3_singleFetch: true,
         v3_lazyRouteDiscovery: true,
       },
-      ignoredRouteFiles: ["**/*.test.*", "**/__tests__/**"],
+      ignoredRouteFiles: ['**/*.test.*', '**/__tests__/**'],
     }),
     tsconfigPaths(),
   ],
@@ -34,15 +34,15 @@ export default defineConfig({
         '**/*.config.*',
         '**/postcss.config.js',
         '**/tailwind.config.js',
-        'coverage/**'
+        'coverage/**',
       ],
       thresholds: {
         statements: 80,
         branches: 80,
         functions: 80,
         lines: 80,
-        perFile: true
-      }
-    }
+        perFile: true,
+      },
+    },
   },
 });

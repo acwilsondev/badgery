@@ -29,7 +29,11 @@ export interface SecretManager {
   /** Get a required secret value */
   getSecret(key: string, formatValidator?: RegExp): Promise<string>;
   /** Get an optional secret value with default */
-  getOptionalSecret(key: string, defaultValue: string, formatValidator?: RegExp): Promise<string>;
+  getOptionalSecret(
+    key: string,
+    defaultValue: string,
+    formatValidator?: RegExp
+  ): Promise<string>;
   /** Check if a secret exists */
   hasSecret(key: string): Promise<boolean>;
 }
@@ -64,4 +68,3 @@ export interface LogEntry {
     stack: string;
   };
 }
-

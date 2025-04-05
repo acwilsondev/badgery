@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Security improvements:
   - npm audit checks for dependency vulnerability detection
   - Snyk integration for comprehensive dependency scanning
@@ -21,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Changelog update enforcement
 
 ### Changed
+
 - Updated CI/CD pipeline with stricter security and documentation requirements
 - Refactored configuration management:
   - Moved from ConfigFactory to EnvConfigManager implementing ConfigManager interface
@@ -36,7 +38,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Enhanced structured logging with better formatting for different environments
   - Improved error object handling in log messages
   - Added environment-specific output formatting (colored for dev, JSON for prod)
+
 ## [0.1.0] - 2025-04-04
 
 ### Added
+
 - Initial project setup

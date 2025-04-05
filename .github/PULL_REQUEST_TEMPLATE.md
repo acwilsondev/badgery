@@ -40,9 +40,9 @@
 ## Related Issue
 
 <!-- If this PR addresses an open issue, please link to the issue here -->
+
 Closes #
 
 ## Additional Notes
 
 <!-- Add any other information about the PR here -->
-

@@ -12,7 +12,7 @@ export class EnvConfigManager implements ConfigManager {
   private static readonly defaults: Config = {
     nodeEnv: 'development',
     port: 3000,
-    logLevel: 'debug'
+    logLevel: 'debug',
   };
 
   /**
@@ -71,12 +71,16 @@ export class EnvConfigManager implements ConfigManager {
    */
   private validateNodeEnv(env: string | undefined): NodeEnv {
     const validEnvs: NodeEnv[] = ['development', 'staging', 'production'];
-    const nodeEnv = (env ?? EnvConfigManager.defaults.nodeEnv).toLowerCase() as NodeEnv;
-    
+    const nodeEnv = (
+      env ?? EnvConfigManager.defaults.nodeEnv
+    ).toLowerCase() as NodeEnv;
+
     if (!validEnvs.includes(nodeEnv)) {
-      throw new Error(`Invalid NODE_ENV: ${env}. Must be one of: ${validEnvs.join(', ')}`);
+      throw new Error(
+        `Invalid NODE_ENV: ${env}. Must be one of: ${validEnvs.join(', ')}`
+      );
     }
-    
+
     return nodeEnv;
   }
 
@@ -87,13 +91,22 @@ export class EnvConfigManager implements ConfigManager {
    * @throws {Error} If the log level value is invalid
    */
   private validateLogLevel(level: string | undefined): Config['logLevel'] {
-    const validLevels: Config['logLevel'][] = ['debug', 'info', 'warn', 'error'];
-    const logLevel = (level ?? EnvConfigManager.defaults.logLevel).toLowerCase() as Config['logLevel'];
-    
+    const validLevels: Config['logLevel'][] = [
+      'debug',
+      'info',
+      'warn',
+      'error',
+    ];
+    const logLevel = (
+      level ?? EnvConfigManager.defaults.logLevel
+    ).toLowerCase() as Config['logLevel'];
+
     if (!validLevels.includes(logLevel)) {
-      throw new Error(`Invalid LOG_LEVEL: ${level}. Must be one of: ${validLevels.join(', ')}`);
+      throw new Error(
+        `Invalid LOG_LEVEL: ${level}. Must be one of: ${validLevels.join(', ')}`
+      );
     }
-    
+
     return logLevel;
   }
 
@@ -105,7 +118,9 @@ export class EnvConfigManager implements ConfigManager {
   private loadConfig(): Config {
     const nodeEnv = this.validateNodeEnv(process.env.NODE_ENV);
     const logLevel = this.validateLogLevel(process.env.LOG_LEVEL);
-    const port = process.env.PORT ? parseInt(process.env.PORT, 10) : EnvConfigManager.defaults.port;
+    const port = process.env.PORT
+      ? parseInt(process.env.PORT, 10)
+      : EnvConfigManager.defaults.port;
 
     if (isNaN(port)) {
       throw new Error(`Invalid PORT: ${process.env.PORT}. Must be a number.`);
@@ -114,7 +129,7 @@ export class EnvConfigManager implements ConfigManager {
     return {
       nodeEnv,
       port,
-      logLevel
+      logLevel,
     };
   }
 
@@ -126,4 +141,3 @@ export class EnvConfigManager implements ConfigManager {
     EnvConfigManager.instance = undefined;
   }
 }
-

@@ -9,21 +9,21 @@ export class ConsoleLogger implements Logger {
   private static instance: ConsoleLogger;
   private readonly logLevel: LogLevel;
   private readonly nodeEnv: NodeEnv;
-  
+
   /** Priority order of log levels */
   private static readonly LOG_LEVEL_PRIORITY: Record<LogLevel, number> = {
     debug: 0,
     info: 1,
     warn: 2,
-    error: 3
+    error: 3,
   };
 
   /** ANSI color codes for different log levels */
   private static readonly COLORS: Record<LogLevel, string> = {
     debug: '\x1b[36m', // cyan
-    info: '\x1b[32m',  // green
-    warn: '\x1b[33m',  // yellow
-    error: '\x1b[31m'  // red
+    info: '\x1b[32m', // green
+    warn: '\x1b[33m', // yellow
+    error: '\x1b[31m', // red
   };
 
   /** ANSI reset color code */
@@ -56,7 +56,10 @@ export class ConsoleLogger implements Logger {
    * @returns true if the message should be logged
    */
   private shouldLog(level: LogLevel): boolean {
-    return ConsoleLogger.LOG_LEVEL_PRIORITY[level] >= ConsoleLogger.LOG_LEVEL_PRIORITY[this.logLevel];
+    return (
+      ConsoleLogger.LOG_LEVEL_PRIORITY[level] >=
+      ConsoleLogger.LOG_LEVEL_PRIORITY[this.logLevel]
+    );
   }
 
   /**
@@ -66,18 +69,22 @@ export class ConsoleLogger implements Logger {
    * @param error Optional error object
    * @returns Structured log entry
    */
-  private createLogEntry(level: LogLevel, message: string, error?: Error): LogEntry {
+  private createLogEntry(
+    level: LogLevel,
+    message: string,
+    error?: Error
+  ): LogEntry {
     const entry: LogEntry = {
       timestamp: new Date().toISOString(),
       level,
       message,
-      env: this.nodeEnv
+      env: this.nodeEnv,
     };
 
     if (error) {
       entry.error = {
         message: error.message,
-        stack: error.stack || ''
+        stack: error.stack || '',
       };
     }
 
@@ -94,11 +101,11 @@ export class ConsoleLogger implements Logger {
     const reset = ConsoleLogger.RESET_COLOR;
     const level = entry.level.toUpperCase().padEnd(5);
     let output = `${color}${level}${reset} [${entry.timestamp}] ${entry.message}`;
-    
+
     if (entry.error) {
       output += `\n${entry.error.message}\n${entry.error.stack}`;
     }
-    
+
     return output;
   }
 
@@ -157,4 +164,3 @@ export class ConsoleLogger implements Logger {
     ConsoleLogger.instance = undefined;
   }
 }
-

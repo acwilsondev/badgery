@@ -14,7 +14,7 @@ describe('EnvConfigManager', () => {
     test('should return the same instance when getInstance is called multiple times', () => {
       const instance1 = EnvConfigManager.getInstance();
       const instance2 = EnvConfigManager.getInstance();
-      
+
       expect(instance1).toBe(instance2);
     });
   });
@@ -23,11 +23,11 @@ describe('EnvConfigManager', () => {
     test('should load default values when environment variables are not set', () => {
       const manager = EnvConfigManager.getInstance();
       const config = manager.getConfig();
-      
+
       expect(config).toEqual({
         nodeEnv: 'development',
         port: 3000,
-        logLevel: 'debug'
+        logLevel: 'debug',
       });
     });
 
@@ -38,11 +38,11 @@ describe('EnvConfigManager', () => {
 
       const manager = EnvConfigManager.getInstance();
       const config = manager.getConfig();
-      
+
       expect(config).toEqual({
         nodeEnv: 'staging',
         port: 8080,
-        logLevel: 'info'
+        logLevel: 'info',
       });
     });
 
@@ -53,11 +53,11 @@ describe('EnvConfigManager', () => {
 
       const manager = EnvConfigManager.getInstance();
       const config = manager.getConfig();
-      
+
       expect(config).toEqual({
         nodeEnv: 'production',
         port: 8080,
-        logLevel: 'warn'
+        logLevel: 'warn',
       });
     });
 
@@ -67,11 +67,11 @@ describe('EnvConfigManager', () => {
 
       const manager = EnvConfigManager.getInstance();
       const config = manager.getConfig();
-      
+
       expect(config).toEqual({
         nodeEnv: 'production',
         port: 3000,
-        logLevel: 'warn'
+        logLevel: 'warn',
       });
     });
   });
@@ -79,23 +79,26 @@ describe('EnvConfigManager', () => {
   describe('Validation', () => {
     test('should throw error for invalid NODE_ENV', () => {
       process.env.NODE_ENV = 'invalid';
-      
-      expect(() => EnvConfigManager.getInstance())
-        .toThrow('Invalid NODE_ENV: invalid. Must be one of: development, staging, production');
+
+      expect(() => EnvConfigManager.getInstance()).toThrow(
+        'Invalid NODE_ENV: invalid. Must be one of: development, staging, production'
+      );
     });
 
     test('should throw error for invalid LOG_LEVEL', () => {
       process.env.LOG_LEVEL = 'invalid';
-      
-      expect(() => EnvConfigManager.getInstance())
-        .toThrow('Invalid LOG_LEVEL: invalid. Must be one of: debug, info, warn, error');
+
+      expect(() => EnvConfigManager.getInstance()).toThrow(
+        'Invalid LOG_LEVEL: invalid. Must be one of: debug, info, warn, error'
+      );
     });
 
     test('should throw error for invalid PORT', () => {
       process.env.PORT = 'not-a-number';
-      
-      expect(() => EnvConfigManager.getInstance())
-        .toThrow('Invalid PORT: not-a-number. Must be a number.');
+
+      expect(() => EnvConfigManager.getInstance()).toThrow(
+        'Invalid PORT: not-a-number. Must be a number.'
+      );
     });
 
     test('should validate configuration successfully', async () => {
@@ -129,9 +132,8 @@ describe('EnvConfigManager', () => {
       expect(newConfig).toEqual({
         nodeEnv: 'production',
         port: 8080,
-        logLevel: 'warn'
+        logLevel: 'warn',
       });
     });
   });
 });
-

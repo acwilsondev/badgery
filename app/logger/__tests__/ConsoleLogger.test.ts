@@ -21,7 +21,7 @@ interface ConfigManager {
 // Mock implementation of ConfigManager
 class MockConfigManager implements ConfigManager {
   constructor(private config: Config) {}
-  
+
   getConfig(): Config {
     return this.config;
   }
@@ -30,7 +30,7 @@ describe('ConsoleLogger', () => {
   const mockConfig = {
     nodeEnv: 'development' as const,
     port: 3000,
-    logLevel: 'debug' as const
+    logLevel: 'debug' as const,
   };
 
   beforeEach(() => {
@@ -52,10 +52,10 @@ describe('ConsoleLogger', () => {
       vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
         new MockConfigManager(mockConfig)
       );
-      
+
       const instance1 = ConsoleLogger.getInstance();
       const instance2 = ConsoleLogger.getInstance();
-      
+
       expect(instance1).toBe(instance2);
       expect(EnvConfigManager.getInstance).toHaveBeenCalledTimes(1);
     });
@@ -65,13 +65,13 @@ describe('ConsoleLogger', () => {
       vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
         new MockConfigManager(customConfig)
       );
-      
+
       const logger = ConsoleLogger.getInstance();
-      
+
       // Log a message to test the configured level
       logger.debug('Debug message');
       logger.info('Info message');
-      
+
       // Debug shouldn't be called with 'info' level
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).toHaveBeenCalled();
@@ -84,14 +84,14 @@ describe('ConsoleLogger', () => {
       vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
         new MockConfigManager(customConfig)
       );
-      
+
       const logger = ConsoleLogger.getInstance();
-      
+
       logger.debug('Debug message');
       logger.info('Info message');
       logger.warn('Warning message');
       logger.error('Error message');
-      
+
       expect(console.debug).not.toHaveBeenCalled();
       expect(console.info).not.toHaveBeenCalled();
       expect(console.warn).toHaveBeenCalled();
@@ -105,20 +105,22 @@ describe('ConsoleLogger', () => {
       vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
         new MockConfigManager(prodConfig)
       );
-      
+
       const logger = ConsoleLogger.getInstance();
-      
+
       logger.info('Test message');
-      
+
       const call = (console.info as jest.Mock).mock.calls[0][0];
       const logObject = JSON.parse(call);
-      
-      expect(logObject).toEqual(expect.objectContaining({
-        timestamp: expect.any(String),
-        level: 'info',
-        message: 'Test message',
-        env: 'production'
-      }));
+
+      expect(logObject).toEqual(
+        expect.objectContaining({
+          timestamp: expect.any(String),
+          level: 'info',
+          message: 'Test message',
+          env: 'production',
+        })
+      );
       expect(new Date(logObject.timestamp).toString()).not.toBe('Invalid Date');
     });
 
@@ -127,22 +129,24 @@ describe('ConsoleLogger', () => {
       vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
         new MockConfigManager(prodConfig)
       );
-      
+
       const logger = ConsoleLogger.getInstance();
       const error = new Error('Test error');
-      
+
       logger.error('Error occurred', error);
-      
+
       const call = (console.error as jest.Mock).mock.calls[0][0];
       const logObject = JSON.parse(call);
-      
-      expect(logObject).toEqual(expect.objectContaining({
-        message: 'Error occurred',
-        error: expect.objectContaining({
-          message: 'Test error',
-          stack: expect.any(String)
+
+      expect(logObject).toEqual(
+        expect.objectContaining({
+          message: 'Error occurred',
+          error: expect.objectContaining({
+            message: 'Test error',
+            stack: expect.any(String),
+          }),
         })
-      }));
+      );
     });
   });
 
@@ -152,12 +156,12 @@ describe('ConsoleLogger', () => {
       vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
         new MockConfigManager(devConfig)
       );
-      
+
       const logger = ConsoleLogger.getInstance();
       logger.info('Test message');
-      
+
       const call = (console.info as jest.Mock).mock.calls[0][0];
-      
+
       expect(call).toContain('\x1b[');
       expect(call).toContain('Test message');
       expect(call).toContain('INFO');
@@ -169,20 +173,22 @@ describe('ConsoleLogger', () => {
       vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
         new MockConfigManager(prodConfig)
       );
-      
+
       const logger = ConsoleLogger.getInstance();
       logger.info('Test message');
-      
+
       const call = (console.info as jest.Mock).mock.calls[0][0];
-      
+
       expect(() => JSON.parse(call)).not.toThrow();
       const logObject = JSON.parse(call);
-      expect(logObject).toEqual(expect.objectContaining({
-        timestamp: expect.any(String),
-        level: 'info',
-        message: 'Test message',
-        env: 'production'
-      }));
+      expect(logObject).toEqual(
+        expect.objectContaining({
+          timestamp: expect.any(String),
+          level: 'info',
+          message: 'Test message',
+          env: 'production',
+        })
+      );
     });
 
     test('staging should use JSON', () => {
@@ -190,21 +196,22 @@ describe('ConsoleLogger', () => {
       vi.spyOn(EnvConfigManager, 'getInstance').mockReturnValue(
         new MockConfigManager(stagingConfig)
       );
-      
+
       const logger = ConsoleLogger.getInstance();
       logger.info('Test message');
-      
+
       const call = (console.info as jest.Mock).mock.calls[0][0];
-      
+
       expect(() => JSON.parse(call)).not.toThrow();
       const logObject = JSON.parse(call);
-      expect(logObject).toEqual(expect.objectContaining({
-        timestamp: expect.any(String),
-        level: 'info',
-        message: 'Test message',
-        env: 'staging'
-      }));
+      expect(logObject).toEqual(
+        expect.objectContaining({
+          timestamp: expect.any(String),
+          level: 'info',
+          message: 'Test message',
+          env: 'staging',
+        })
+      );
     });
   });
 });
-
