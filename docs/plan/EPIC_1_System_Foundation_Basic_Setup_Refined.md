@@ -69,40 +69,47 @@ Aligns with Milestone 1: Foundation & CI/CD
 **Tasks:**
 
 - [ ] Initial AWS CDK Setup
+
   - Initialize CDK project with TypeScript
   - Create VPC with public and private subnets
   - Set up security groups and IAM roles
 
 - [ ] Container Registry Setup
+
   - Create ECR repository
   - Configure GitHub Actions for image pushing
   - Implement image lifecycle policies
 
 - [ ] ECS Fargate Configuration
+
   - Create ECS cluster
   - Define task definitions with proper resource allocation
   - Configure service auto-scaling rules
   - Set up CloudWatch logs
 
 - [ ] Load Balancer and Networking
+
   - Configure Application Load Balancer
   - Set up target groups with health checks
   - Configure DNS with Route 53
   - Set up SSL certificates with ACM
 
 - [ ] CI/CD Pipeline
+
   - Update GitHub Actions workflow for AWS deployment
   - Implement blue/green deployment strategy
   - Configure CodeDeploy
   - Set up automated rollbacks
 
 - [ ] Monitoring and Alerting
+
   - Set up CloudWatch dashboards
   - Configure container insights
   - Create alarms for critical metrics
   - Set up error reporting
 
 - [ ] Security and Secrets
+
   - Configure AWS Secrets Manager
   - Set up IAM roles and policies
   - Implement security group rules
@@ -156,7 +163,7 @@ Aligns with Milestone 1: Foundation & CI/CD
 - Monitoring and Alerting: 1 day
 - Security and Secrets: 1 day
 - Testing and Documentation: 1 day
-Total: 6 days
+  Total: 6 days
 
 **AI Complexity: M** Setting up cloud infrastructure requires careful coordination of multiple AWS services while maintaining security best practices and ensuring high availability.
 
@@ -169,17 +176,20 @@ Total: 6 days
 **Tasks:**
 
 - [ ] Pre-publicity Security Review
+
   - Verify no sensitive tokens or credentials in git history
   - Ensure all project secrets are managed through GitHub Secrets
   - Confirm CI/CD workflow security best practices
 
 - [ ] Documentation Enhancement
+
   - Expand README.md with comprehensive project information
   - Complete CONTRIBUTING.md with detailed guidelines
   - Add necessary API documentation
   - Review and update inline code documentation
 
 - [ ] GitHub Settings Configuration
+
   - Make repository public
   - Configure branch protection rules for main
     - Require status checks to pass
@@ -220,7 +230,7 @@ Total: 6 days
 - Security Review: 0.5 day
 - Documentation Updates: 1 day
 - GitHub Configuration: 0.5 day
-Total: 2 days
+  Total: 2 days
 
 **AI Complexity: L** Making a repository public requires careful verification of security concerns and thorough documentation, but follows standard processes.
 

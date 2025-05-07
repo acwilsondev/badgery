@@ -5,12 +5,12 @@ describe('Index Route', () => {
   describe('meta', () => {
     it('should return correct metadata', () => {
       const result = meta();
-      
+
       expect(result).toHaveLength(2);
       expect(result[0]).toEqual({ title: 'New Remix App' });
-      expect(result[1]).toEqual({ 
-        name: 'description', 
-        content: 'Welcome to Remix!' 
+      expect(result[1]).toEqual({
+        name: 'description',
+        content: 'Welcome to Remix!',
       });
     });
   });
@@ -21,9 +21,11 @@ describe('Index Route', () => {
     });
 
     it('should render welcome heading', () => {
-      expect(screen.getByRole('heading', { 
-        name: /welcome to remix/i 
-      })).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', {
+          name: /welcome to remix/i,
+        })
+      ).toBeInTheDocument();
     });
 
     it('should render both light and dark mode logos', () => {
@@ -39,7 +41,7 @@ describe('Index Route', () => {
     it('should render navigation with external links', () => {
       const nav = screen.getByRole('navigation');
       expect(nav).toBeInTheDocument();
-      
+
       const links = screen.getAllByRole('link');
       expect(links).toHaveLength(4);
 
@@ -55,7 +57,7 @@ describe('Index Route', () => {
         'https://remix.run/start/quickstart',
         'https://remix.run/start/tutorial',
         'https://remix.run/docs',
-        'https://rmx.as/discord'
+        'https://rmx.as/discord',
       ];
 
       const links = screen.getAllByRole('link');
@@ -66,7 +68,7 @@ describe('Index Route', () => {
     it('should render SVG icons for each link', () => {
       const svgs = document.querySelectorAll('svg');
       expect(svgs).toHaveLength(4);
-      
+
       svgs.forEach(svg => {
         expect(svg).toHaveClass(
           'stroke-gray-600',
@@ -77,4 +79,3 @@ describe('Index Route', () => {
     });
   });
 });
-
